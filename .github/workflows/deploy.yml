@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: acoular/structure-borne-sound-lecture
-          path: content/sbs
+          path: './content/sbs'
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
