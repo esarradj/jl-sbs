@@ -14,6 +14,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: acoular/structure-borne-sound-lecture
+          path: content/sbs
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -23,7 +28,6 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Build the JupyterLite site
         run: |
-          cp -r structure-borne-sound-lecture/* content
           jupyter lite build --contents content --output-dir dist
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
