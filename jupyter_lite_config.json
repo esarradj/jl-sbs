@@ -1,0 +1,14 @@
+{
+  "LiteBuildConfig": {
+    "contents": ["content"],
+    "output_dir": "dist"
+  },
+  "PyodideLockAddon": {
+    "enabled": true,
+    "specs": ["-r pyodide-requirements.txt"],
+    "prefetch_extra": ["ipywidgets"]
+  },
+  "PyodideLockOfflineAddon": {
+    "enabled": true
+  }
+}
