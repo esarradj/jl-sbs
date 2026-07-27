@@ -1,11 +1,10 @@
 # Core modules (mandatory)
-jupyterlite-core==0.6.4
-jupyterlab~=4.4.5
-notebook~=7.4.5
-
+jupyterlite-core==0.8.0
+jupyterlab~=4.6.0
+notebook~=7.6.0
 
 # Python kernel (optional)
-jupyterlite-pyodide-kernel==0.6.1
+jupyterlite-pyodide-kernel==0.8.0
 
 # JavaScript kernel (optional)
 jupyterlite-javascript-kernel==0.3.0
@@ -15,7 +14,7 @@ jupyterlab-language-pack-fr-FR
 jupyterlab-language-pack-zh-CN
 
 # P5 kernel (optional)
-jupyterlite-p5-kernel==0.1.0
+jupyterlite-p5-kernel==0.3.0
 
 # JupyterLab: Fasta file renderer (optional)
 jupyterlab-fasta>=3.3.0,<4
