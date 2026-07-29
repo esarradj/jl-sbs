@@ -7,12 +7,14 @@ from pathlib import Path
 
 
 PATCHES = {
-    ",processEscapes:true,processEnvironments:true})": ',processEscapes:true,processEnvironments:true,tags:"ams"})',
-    ",processEscapes:!0,processEnvironments:!0})": ',processEscapes:!0,processEnvironments:!0,tags:"ams"})',
+    ",processEscapes:true,processEnvironments:true})": ',processEscapes:true,processEnvironments:true,tags:"ams",ignoreDuplicateLabels:true})',
+    ",processEscapes:true,processEnvironments:true,tags:\"ams\"})": ',processEscapes:true,processEnvironments:true,tags:"ams",ignoreDuplicateLabels:true})',
+    ",processEscapes:!0,processEnvironments:!0})": ',processEscapes:!0,processEnvironments:!0,tags:"ams",ignoreDuplicateLabels:!0})',
+    ",processEscapes:!0,processEnvironments:!0,tags:\"ams\"})": ',processEscapes:!0,processEnvironments:!0,tags:"ams",ignoreDuplicateLabels:!0})',
 }
 ALREADY_PATCHED = (
-    ',processEscapes:true,processEnvironments:true,tags:"ams"})',
-    ',processEscapes:!0,processEnvironments:!0,tags:"ams"})',
+    ',processEscapes:true,processEnvironments:true,tags:"ams",ignoreDuplicateLabels:true})',
+    ',processEscapes:!0,processEnvironments:!0,tags:"ams",ignoreDuplicateLabels:!0})',
 )
 
 
