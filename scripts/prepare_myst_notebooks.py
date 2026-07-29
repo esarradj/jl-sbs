@@ -7,6 +7,7 @@ from pathlib import Path
 
 
 COMMAND_RE = re.compile(r"\\(?:re)?newcommand|\\providecommand")
+EQREF_RE = re.compile(r"\\eqref\{([^}]+)\}")
 WRAPPER_RE = re.compile(r"^\s*(?:\$+|\\begin\{equation\*?\}|\\end\{equation\*?\})\s*$")
 
 
@@ -107,6 +108,10 @@ def set_source(cell: dict, text: str) -> None:
     cell["source"] = text.splitlines(keepends=True)
 
 
+def replace_eqrefs(text: str) -> str:
+    return EQREF_RE.sub(r"[](#\1)", text)
+
+
 def strip_commands(text: str, commands: list[tuple[str, str, int, int]]) -> str:
     chunks = []
     pos = 0
@@ -144,11 +149,15 @@ def process_notebook(path: Path) -> bool:
     notebook = json.loads(path.read_text(encoding="utf-8"))
     cells = notebook.get("cells", [])
     macros: dict[str, str] = {}
+    changed = False
 
     for cell in cells:
         if cell.get("cell_type") != "markdown":
             continue
-        text = source_text(cell)
+        text = replace_eqrefs(source_text(cell))
+        if text != source_text(cell):
+            set_source(cell, text)
+            changed = True
         commands = find_commands(text)
         if not commands:
             continue
@@ -156,9 +165,15 @@ def process_notebook(path: Path) -> bool:
             macros[name] = macro
         stripped = strip_commands(text, commands)
         set_source(cell, stripped)
+        changed = True
 
     if not macros:
-        return False
+        if changed:
+            path.write_text(
+                json.dumps(notebook, indent=1, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+        return changed
 
     notebook["cells"] = [
         cell
@@ -180,7 +195,7 @@ def main(argv: list[str]) -> int:
         for path in root.rglob("*.ipynb"):
             if process_notebook(path):
                 updated += 1
-                print(f"Prepared MyST math macros in {path}")
+                print(f"Prepared MyST notebook in {path}")
     print(f"Prepared {updated} notebook(s).")
     return 0
 
