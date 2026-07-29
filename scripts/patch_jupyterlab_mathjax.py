@@ -10,7 +10,10 @@ PATCHES = {
     ",processEscapes:true,processEnvironments:true})": ',processEscapes:true,processEnvironments:true,tags:"ams"})',
     ",processEscapes:!0,processEnvironments:!0})": ',processEscapes:!0,processEnvironments:!0,tags:"ams"})',
 }
-ALREADY_PATCHED = 'tags:"ams"'
+ALREADY_PATCHED = (
+    ',processEscapes:true,processEnvironments:true,tags:"ams"})',
+    ',processEscapes:!0,processEnvironments:!0,tags:"ams"})',
+)
 
 
 def static_dirs() -> set[Path]:
@@ -33,7 +36,13 @@ def static_dirs() -> set[Path]:
 
 def candidate_files(paths: list[str]) -> list[Path]:
     if paths:
-        return [Path(path) for path in paths]
+        files: list[Path] = []
+        for path in map(Path, paths):
+            if path.is_dir():
+                files.extend(path.rglob("*.js"))
+            else:
+                files.append(path)
+        return files
 
     files: list[Path] = []
     for static_dir in static_dirs():
@@ -53,7 +62,7 @@ def main() -> int:
             continue
 
         text = path.read_text()
-        if ALREADY_PATCHED in text:
+        if any(patched in text for patched in ALREADY_PATCHED):
             already_patched.append(path)
             continue
 

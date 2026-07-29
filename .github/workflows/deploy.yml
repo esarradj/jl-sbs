@@ -33,6 +33,9 @@ jobs:
         run: |
           ls -la './content'
           jupyter lite build --config jupyter_lite_config.json
+      - name: Configure built JupyterLite MathJax
+        run: |
+          python scripts/patch_jupyterlab_mathjax.py dist
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
