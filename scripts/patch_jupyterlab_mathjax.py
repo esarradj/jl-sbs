@@ -6,9 +6,11 @@ import sysconfig
 from pathlib import Path
 
 
-OLD = ',processEscapes:true,processEnvironments:true});const'
-NEW = ',processEscapes:true,processEnvironments:true,tags:"ams"});const'
-ALREADY_PATCHED = ',processEscapes:true,processEnvironments:true,tags:"ams"});const'
+PATCHES = {
+    ",processEscapes:true,processEnvironments:true})": ',processEscapes:true,processEnvironments:true,tags:"ams"})',
+    ",processEscapes:!0,processEnvironments:!0})": ',processEscapes:!0,processEnvironments:!0,tags:"ams"})',
+}
+ALREADY_PATCHED = 'tags:"ams"'
 
 
 def static_dirs() -> set[Path]:
@@ -35,7 +37,7 @@ def candidate_files(paths: list[str]) -> list[Path]:
 
     files: list[Path] = []
     for static_dir in static_dirs():
-        files.extend(static_dir.glob("jlab_core*.js"))
+        files.extend(static_dir.glob("*.js"))
     return files
 
 
@@ -55,12 +57,15 @@ def main() -> int:
             already_patched.append(path)
             continue
 
-        count = text.count(OLD)
-        if count == 0:
+        new_text = text
+        for old, new in PATCHES.items():
+            new_text = new_text.replace(old, new)
+
+        if new_text == text:
             continue
 
         if not dry_run:
-            path.write_text(text.replace(OLD, NEW))
+            path.write_text(new_text)
         patched.append(path)
 
     if patched:
