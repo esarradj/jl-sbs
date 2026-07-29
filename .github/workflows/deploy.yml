@@ -26,12 +26,10 @@ jobs:
       - name: Install the dependencies
         run: |
           python -m pip install -r requirements.txt
-      - name: Enable MyST amsmath extension
-        run: |
-          python scripts/patch_jupyterlab_myst_ams.py
       - name: Build the JupyterLite site
         run: |
           ls -la './content'
+          python scripts/prepare_myst_notebooks.py content/sbs
           jupyter lite build --config jupyter_lite_config.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
