@@ -29,7 +29,6 @@ jobs:
       - name: Build the JupyterLite site
         run: |
           ls -la './content'
-          python scripts/prepare_myst_notebooks.py content/sbs
           jupyter lite build --config jupyter_lite_config.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
